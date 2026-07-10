@@ -110,8 +110,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // 7. Form Validation
+    // 7. Form Validation & Netlify Submission
     const contactForm = document.getElementById('contact-form');
-    
+
     contactForm.addEventListener('submit', function(e) {
         e.preventDefault();
         
@@ -132,7 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
             isValid = false;
         }
 
-        // Validate Email (Regex)
+        // Validate Email
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (email.value.trim() === '') {
             setError(email, 'Email is required');
@@ -142,7 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
             isValid = false;
         }
 
-        // Validate Phone (Regex - Simple international format)
+        // Validate Phone
         const phoneRegex = /^[+]?[\d\s-]{10,15}$/;
         if (phone.value.trim() === '') {
             setError(phone, 'Phone number is required');
@@ -158,31 +159,33 @@ document.addEventListener("DOMContentLoaded", () => {
             isValid = false;
         }
 
-        // Success Action
+        // Submit via AJAX to Netlify if validation passes
         if (isValid) {
-            // 1. Gather the form data
             const formData = new FormData(contactForm);
             
-            // 2. Send the data to Netlify via a POST request
             fetch("/", {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 body: new URLSearchParams(formData).toString(),
             })
-            .then(() => {
-                // 3. Show the success message only AFTER a successful network request
-                const successMsg = document.getElementById('form-success');
-                successMsg.classList.remove('hidden');
-                contactForm.reset();
-                
-                // Hide success message after 5 seconds
-                setTimeout(() => {
-                    successMsg.classList.add('hidden');
-                }, 5000);
+            .then((response) => {
+                if (response.ok) {
+                    // Show success message container
+                    const successMsg = document.getElementById('form-success');
+                    successMsg.classList.remove('hidden');
+                    contactForm.reset();
+                    
+                    // Hide success message after 5 seconds
+                    setTimeout(() => {
+                        successMsg.classList.add('hidden');
+                    }, 5000);
+                } else {
+                    throw new Error('Network response was not ok.');
+                }
             })
             .catch((error) => {
                 console.error("Netlify Submission Error:", error);
-                alert("Something went wrong. Please try again or reach out via WhatsApp!");
+                alert("Submission failed. Please try again or reach out directly over WhatsApp!");
             });
         }
     });
