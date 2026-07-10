@@ -236,7 +236,7 @@ https://github.com/KeshavRathii
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/setu-web-solutions.git
+git clone https://github.com/KeshavRathii/SetuDigitalServices.git
 ```
 
 ### Open the Project
