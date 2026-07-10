@@ -160,14 +160,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Success Action
         if (isValid) {
-            const successMsg = document.getElementById('form-success');
-            successMsg.classList.remove('hidden');
-            contactForm.reset();
+            // 1. Gather the form data
+            const formData = new FormData(contactForm);
             
-            // Hide success message after 5 seconds
-            setTimeout(() => {
-                successMsg.classList.add('hidden');
-            }, 5000);
+            // 2. Send the data to Netlify via a POST request
+            fetch("/", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams(formData).toString(),
+            })
+            .then(() => {
+                // 3. Show the success message only AFTER a successful network request
+                const successMsg = document.getElementById('form-success');
+                successMsg.classList.remove('hidden');
+                contactForm.reset();
+                
+                // Hide success message after 5 seconds
+                setTimeout(() => {
+                    successMsg.classList.add('hidden');
+                }, 5000);
+            })
+            .catch((error) => {
+                console.error("Netlify Submission Error:", error);
+                alert("Something went wrong. Please try again or reach out via WhatsApp!");
+            });
         }
     });
 

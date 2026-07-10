@@ -391,7 +391,8 @@
                 </div>
 
                 <div class="contact-form-container glass-card">
-                    <form id="contact-form" class="contact-form" name="ContactsDetails" data-netlify="true">
+                    <form id="contact-form" class="contact-form" name="ContactsDetails" method="POST" data-netlify="true">
+                        <input type="hidden" name="form-name" value="ContactsDetails">
                         <div class="form-group">
                             <label for="name">Name</label>
                             <input type="text" id="name" name="name" placeholder="Aman">
